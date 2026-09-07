@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/clipper
+    username: clipper
+    password: clipper
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+
+clipper:
+  geocoding:
+    base-url: https://api-gouv.lab.rioc.fr
+    min-score: 0.70

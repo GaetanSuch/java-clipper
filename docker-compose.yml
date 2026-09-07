@@ -1,0 +1,17 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: clipper-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: clipper
+      MYSQL_USER: clipper
+      MYSQL_PASSWORD: clipper
+    ports:
+      - "3306:3306"
+    volumes:
+      - clipper_mysql_data:/var/lib/mysql
+
+
+volumes:
+  clipper_mysql_data:
