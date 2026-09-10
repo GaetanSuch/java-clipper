@@ -140,22 +140,20 @@ public class StoreServiceImp implements StoreService {
                             .estimatedArrivalAt(arrival)
                             .build();
 
-                    log.info("📦 Expédition | usine '{}' → magasin '{}' | {} trombones | {} km | arrivée dans {}s",
-                            factory.getName(), store.getName(),
-                            quantity, Math.round(distanceKm * 10.0) / 10.0,
+                    log.info("Expedition de {} trombones : usine '{}' vers magasin '{}', {} km, arrivee dans {}s",
+                            quantity, factory.getName(), store.getName(),
+                            Math.round(distanceKm * 10.0) / 10.0,
                             Math.round(deliverySeconds * 10.0) / 10.0);
 
                     factoryRepository.save(factory);
                     return shipmentRepository.save(shipment);
                 });
             } catch (OptimisticLockException e) {
-                if (attempt == MAX_RETRIES) {
-                    throw new ConflictException("Conflit de concurrence après "
-                            + MAX_RETRIES + " tentatives, réessayez plus tard");
-                }
+                log.warn("Tentative {}/{} echouee, conflit de concurrence", attempt, MAX_RETRIES);
             }
         }
-        throw new ConflictException("Erreur inattendue");
+        throw new ConflictException("Conflit de concurrence apres "
+                + MAX_RETRIES + " tentatives, reessayez plus tard");
     }
 
     public List<Shipment> getShipments(Long storeId, String status) {

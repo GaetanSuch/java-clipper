@@ -25,7 +25,6 @@ class ProductionServiceTest {
     @InjectMocks
     private ProductionService productionService;
 
-    // ──── Tests sur Factory.produce() (logique métier pure) ────
 
     @Test
     void produce_shouldAddProductionToStock() {

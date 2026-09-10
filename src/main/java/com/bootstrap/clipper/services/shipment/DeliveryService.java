@@ -28,7 +28,7 @@ public class DeliveryService {
             shipment.setDeliveredAt(LocalDateTime.now());
             shipment.getStore().addStock(shipment.getQuantity());
 
-            log.info("📦 Livraison #{} terminée | usine '{}' → magasin '{}' | +{} trombones (stock: {})",
+            log.info("Livraison #{} terminee : usine '{}' vers magasin '{}', +{} trombones (stock: {})",
                     shipment.getId(),
                     shipment.getFactory().getName(),
                     shipment.getStore().getName(),
