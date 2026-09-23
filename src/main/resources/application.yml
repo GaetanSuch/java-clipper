@@ -13,7 +13,12 @@ spring:
       hibernate:
         format_sql: true
 
+
 clipper:
   geocoding:
     base-url: https://api-gouv.lab.rioc.fr
     min-score: 0.70
+
+
+server:
+  port: 8082

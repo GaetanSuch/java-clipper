@@ -156,6 +156,34 @@ public class StoreServiceImp implements StoreService {
                 + MAX_RETRIES + " tentatives, reessayez plus tard");
     }
 
+    public Store purchase(Long storeId, int quantity) {
+        for (int attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+            try {
+                return transactionTemplate.execute(status -> {
+                    Store store = repository.findById(storeId)
+                            .orElseThrow(() -> new NotFoundException(
+                                    "Le magasin avec l'id " + storeId + " n'existe pas"));
+
+                    if (store.getStock() < quantity) {
+                        throw new ConflictException("Stock insuffisant : le magasin '" + store.getName()
+                                + "' a " + store.getStock() + " trombones, " + quantity + " demandés");
+                    }
+
+                    store.setStock(store.getStock() - quantity);
+
+                    log.info("Achat de {} trombones dans le magasin '{}', stock restant : {}",
+                            quantity, store.getName(), store.getStock());
+
+                    return repository.save(store);
+                });
+            } catch (OptimisticLockException e) {
+                log.warn("Tentative {}/{} echouee, conflit de concurrence", attempt, MAX_RETRIES);
+            }
+        }
+        throw new ConflictException("Conflit de concurrence apres "
+                + MAX_RETRIES + " tentatives, reessayez plus tard");
+    }
+
     public List<Shipment> getShipments(Long storeId, String status) {
         if (!repository.existsById(storeId)) {
             throw new NotFoundException("Le magasin avec l'id " + storeId + " n'existe pas");

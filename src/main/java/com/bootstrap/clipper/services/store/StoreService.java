@@ -11,6 +11,7 @@ public interface StoreService {
     Store updateStore(Long storeId, Store store);
     Store patchStore(Long storeId, Store store);
     Store getStore(Long storeId);
+    Store purchase(Long storeId, int quantity);
     List<Store> getAllStores();
     void deleteStore(Long storeId);
     List<FactoryAvailabilityResponse> getAvailableFactories(Long storeId);
