@@ -4,6 +4,7 @@ import com.bootstrap.clipper.clients.GeocodingClient;
 import com.bootstrap.clipper.models.dao.Shipment;
 import com.bootstrap.clipper.models.dao.Store;
 import com.bootstrap.clipper.models.dto.FactoryAvailabilityResponse;
+import com.bootstrap.clipper.models.dto.PurchaseRequest;
 import com.bootstrap.clipper.models.dto.ShipmentResponse;
 import com.bootstrap.clipper.models.dto.StoreRequest;
 import com.bootstrap.clipper.models.dto.StoreResponse;
@@ -95,6 +96,14 @@ public class StoreController {
         Shipment shipment = service.supplyStore(id, request.factoryId(), request.quantity());
         resolveShipmentAddresses(shipment);
         return ResponseEntity.status(HttpStatus.CREATED).body(shipmentMapper.toResponse(shipment));
+    }
+
+    @PostMapping("/{id}/purchase")
+    public ResponseEntity<StoreResponse> purchaseFromStore(@PathVariable Long id,
+                                                        @Valid @RequestBody PurchaseRequest request) {
+        Store store = service.purchase(id, request.quantity());
+        resolveAddress(store);
+        return ResponseEntity.ok(mapper.toResponse(store));
     }
 
     @DeleteMapping("/{id}")
